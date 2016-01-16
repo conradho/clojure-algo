@@ -1,0 +1,6 @@
+(ns algo.core)
+
+(defn foo []
+  (println "hi alisa"))
+
+
