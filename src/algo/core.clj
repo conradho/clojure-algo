@@ -1,4 +1,5 @@
-(ns algo.core)
+(ns algo.core
+  (:require [clojure.java.io :as io]))
 
 (defn foo
   "random function that prints alisa"
@@ -59,11 +60,16 @@
           [merged (+ merge-count count-left count-right)]
           )))))
 
-
-(def xs (map read-string (clojure.string/split (slurp "IntegerArray.txt") #"\r\n")))
+;; this is unable to load an 80mb file. need to use io/reader etc
+;; also putting it out here ==> running tests will also have to load it
+;; (def xs (map read-string (clojure.string/split (slurp "IntegerArray.txt") #"\r\n")))
 (defn exercise-1 []
-  (println "starting")
-  (println (count-inversion xs)))
+  (let [numbers (map read-string (line-seq (io/reader "IntegerArray.txt")))]
+    ; (println (.readLine rdr))
+    (println (take 4 numbers))
+    (println "starting")
+    (println (count-inversion numbers))
+    ))
 
 ;; the hook that project.clj calls (it tries to find -main)
 (defn -main [& args] (exercise-1))

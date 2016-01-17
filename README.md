@@ -8,7 +8,7 @@ https://class.coursera.org/algo-005
 ## Usage
 
 - lein run
-- lein test
+- lein test algo.core-test
 
 ## License
 
