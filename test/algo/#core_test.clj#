@@ -1,7 +1,0 @@
-(ns algo.core-test
-  (:require [clojure.test :refer :all]
-            [algo.core :refer :all]))
-
-(deftest merge-sort-algo
-  (testing "FIXME, I fail."
-    (is (= 0 1))))

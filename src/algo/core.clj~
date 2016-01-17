@@ -1,4 +1,0 @@
-(ns algo.core)
-
-(defn main
-  (println "Hello, World!"))
