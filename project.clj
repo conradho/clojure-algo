@@ -5,7 +5,15 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]]
   :aot [algo.core]  ; ahead of time compile might be able to optimize
-  :jvm-opts ["-Xms8G" "-Xmx8G" "-Xss8G"
+  :jvm-opts ["-XX:+AggressiveHeap"   ; try to set max heap size/take up as much resources as possible
+
+             ;; do not manually set heap size unless AggressiveHeap still gives out of memory error
+             ;; (or if you don't want to take up whole system's resources)
+             ;; but you are probably going to get swappiness dominating run time if you go over 2x
+             ;; (because aggressiveheap prob chose max heap size of 1/2x ram)
+             ;; for the dataset of ~1GB, with some replication etc the heap goes over 2GB
+             ;; "-Xms4G" "-Xmx4G" "-Xss4G"
+
              ;; performance options
              ;; http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning
              "-XX:+AggressiveOpts"
@@ -24,18 +32,20 @@
 
 
              ;; the young generation GC- dont need one if UseG1GC
-             ;; "-XX:+UseParallelGC"
-             "-XX:+UseParNewGC"
+             "-XX:+UseParallelGC"
+             ;; "-XX:+UseParNewGC"
 
-             ;; the old generation GC
+             ;; the old generation GC- parallel because don't care about response time
+             ;; for server stuff http://blog.sokolenko.me/2014/11/javavm-options-production.html
              ;; "-XX:+UseG1GC"
-             ;; "-XX:+UseParallelOldGC"
-             "-XX:+UseConcMarkSweepGC"
+             "-XX:+UseParallelOldGC"
+             ;; "-XX:+UseConcMarkSweepGC"
 
              ;; debugging stuff
              ;; also use jstat `-gcutil <pid> 10s` and compare YGCT / YGC for avg young gc time, and avg FGC time
-             ;; "-verbose:gc"
-             ;; "-XX:+PrintGCDetails"
+             ;; jmap -heap <pid>
+             "-verbose:gc"
+             "-XX:+PrintGCDetails"
              "-XX:+PrintGCDateStamps"
              ]
   :main algo.core)
